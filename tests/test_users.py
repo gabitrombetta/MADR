@@ -23,21 +23,20 @@ def test_create_duplicate_user(client, user):
     response = client.post(
         '/conta/',
         json={
-            'username': 'testusername',
-            'email': 'test@email.com',
+            'username': user.username,
+            'email': user.email,
             'password': 'test',
         },
     )
 
     assert response.status_code == HTTPStatus.CONFLICT
-    assert response.json() == {
-        'detail': {'message': 'Conta já consta no MADR'}
-    }
+    assert response.json() == {'detail': 'Conta já consta no MADR'}
 
 
-def test_update_user(client, user):
+def test_update_user(client, user, token):
     response = client.put(
         f'/conta/{user.id}',
+        headers={'Authorization': f'Bearer {token}'},
         json={
             'username': 'testusername2',
             'email': 'test2@email.com',
@@ -53,37 +52,36 @@ def test_update_user(client, user):
     }
 
 
-def test_update_wrong_user(client, user):
+def test_update_wrong_user(client, other_user, token):
     response = client.put(
-        f'/conta/{user.id + 1}',
+        f'/conta/{other_user.id}',
+        headers={'Authorization': f'Bearer {token}'},
         json={
-            'username': 'testusername2',
-            'email': 'test2@email.com',
+            'username': 'testusername',
+            'email': 'test@email.com',
             'password': 'test',
         },
     )
 
-    assert response.status_code == HTTPStatus.NOT_FOUND
-    assert response.json() == {
-        'detail': {'message': 'Conta não consta no MADR'}
-    }
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
+    assert response.json() == {'detail': 'Não autorizado'}
 
 
-def test_delete_user(client, user):
+def test_delete_user(client, user, token):
     response = client.delete(
-        '/conta/1',
+        f'/conta/{user.id}',
+        headers={'Authorization': f'Bearer {token}'},
     )
 
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {'message': 'Conta deletada com sucesso'}
 
 
-def test_delete_wrong_user(client, user):
+def test_delete_wrong_user(client, other_user, token):
     response = client.delete(
-        f'/conta/{user.id + 1}',
+        f'/conta/{other_user.id}',
+        headers={'Authorization': f'Bearer {token}'},
     )
 
-    assert response.status_code == HTTPStatus.NOT_FOUND
-    assert response.json() == {
-        'detail': {'message': 'Conta não consta no MADR'}
-    }
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
+    assert response.json() == {'detail': 'Não autorizado'}
