@@ -19,7 +19,7 @@ CurrentUser = Annotated[User, Depends(get_current_user)]
 def create_user(user: UserSchema, session: T_Session):
     db_user = session.scalar(
         select(User).where(
-            (User.username == user.username) | (User.email == user.email)
+            User.username == user.username, User.email == user.email
         )
     )
 
