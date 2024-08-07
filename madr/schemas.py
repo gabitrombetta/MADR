@@ -40,3 +40,24 @@ class NovelistUpdate(BaseModel):
 
 class NovelistList(BaseModel):
     romancistas: list[NovelistPublic]
+
+
+# Books
+class BookSchema(BaseModel):
+    ano: str
+    titulo: str
+
+
+class BookPublic(BaseModel):
+    id: int
+    ano: str
+    titulo: str
+
+
+class BookUpdate(BaseModel):
+    ano: str | None
+    titulo: str | None
+
+
+class BookList(BaseModel):
+    livros: list[BookPublic]

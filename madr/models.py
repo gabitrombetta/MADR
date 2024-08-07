@@ -19,3 +19,12 @@ class Novelist:
 
     id: Mapped[int] = mapped_column(init=False, primary_key=True)
     name: Mapped[str] = mapped_column(unique=True)
+
+
+@table_registry.mapped_as_dataclass
+class Book:
+    __tablename__ = 'books'
+
+    id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    ano: Mapped[str]
+    titulo: Mapped[str] = mapped_column(unique=True)

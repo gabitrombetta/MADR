@@ -85,6 +85,8 @@ def patch_novelist(
         )
 
     for key, value in novelist.model_dump(exclude_unset=True).items():
+        if key == 'name':
+            value = sanitize(value)  # noqa
         setattr(db_novelist, key, value)
 
     session.add(db_novelist)

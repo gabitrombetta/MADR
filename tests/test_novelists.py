@@ -56,11 +56,11 @@ def test_patch_novelist(client, novelist, token):
     response = client.patch(
         f'/romancista/{novelist.id}',
         headers={'Authorization': f'Bearer {token}'},
-        json={'name': 'Test!'},
+        json={'name': 'Test Changed'},
     )
 
     assert response.status_code == HTTPStatus.OK
-    assert response.json()['name'] == 'Test!'
+    assert response.json()['name'] == 'test changed'
 
 
 def test_patch_novelist_error(client, novelist, token):

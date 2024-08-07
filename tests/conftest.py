@@ -7,7 +7,7 @@ from sqlalchemy.pool import StaticPool
 
 from madr.app import app
 from madr.database import get_session
-from madr.models import Novelist, User, table_registry
+from madr.models import Book, Novelist, User, table_registry
 from madr.security import get_password_hash
 
 
@@ -25,6 +25,14 @@ class NovelistFactory(factory.Factory):
         model = Novelist
 
     name = factory.sequence(lambda n: f'Name Test {n}')
+
+
+class BookFactory(factory.Factory):
+    class Meta:
+        model = Book
+
+    ano = factory.Sequence(lambda n: f'199{n}')
+    titulo = factory.Sequence(lambda n: f'test book {n}')
 
 
 @pytest.fixture
@@ -93,14 +101,14 @@ def novelist(session):
 
 
 @pytest.fixture
-def other_novelist(session):
-    novelist = NovelistFactory()
+def book(session):
+    book = BookFactory()
 
-    session.add(novelist)
+    session.add(book)
     session.commit()
-    session.refresh(novelist)
+    session.refresh(book)
 
-    return novelist
+    return book
 
 
 @pytest.fixture
