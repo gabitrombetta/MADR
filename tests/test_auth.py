@@ -26,7 +26,7 @@ def test_token_expired_after_time(client, user):
     assert response.status_code == HTTPStatus.OK
     token = response.json()['access_token']
 
-    with freeze_time('2024-06-30 12:31:00'):
+    with freeze_time('2024-06-30 13:01:00'):
         response = client.put(
             f'/conta/{user.id}',
             headers={'Authorization': f'Bearer {token}'},
@@ -82,7 +82,7 @@ def test_token_expired_dont_refresh(client, user):
         assert response.status_code == HTTPStatus.OK
         token = response.json()['access_token']
 
-    with freeze_time('2024-06-30 12:31:00'):
+    with freeze_time('2024-06-30 13:01:00'):
         response = client.post(
             '/auth/refresh_token',
             headers={'Authorization': f'Bearer {token}'},
