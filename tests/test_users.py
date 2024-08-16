@@ -33,9 +33,10 @@ def test_create_duplicate_user(client, user):
     assert response.json() == {'detail': 'Conta já consta no MADR'}
 
 
-def test_update_user(client, user):
+def test_update_user(client, user, token):
     response = client.put(
         f'/conta/{user.id}',
+        headers={'Authorization': f'Bearer {token}'},
         json={
             'username': 'testusername2',
             'email': 'test2@email.com',
@@ -51,9 +52,10 @@ def test_update_user(client, user):
     }
 
 
-def test_update_wrong_user(client):
+def test_update_user_error(client, token, other_user):
     response = client.put(
-    '/conta/999',
+        f'/conta/{other_user.id}',
+        headers={'Authorization': f'Bearer {token}'},
         json={
             'username': 'testusername',
             'email': 'test@email.com',
@@ -61,23 +63,25 @@ def test_update_wrong_user(client):
         },
     )
 
-    assert response.status_code == HTTPStatus.NOT_FOUND
-    assert response.json() == {'detail': 'User not found'}
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
+    assert response.json() == {'detail': 'Não autorizado'}
 
 
-def test_delete_user(client, user):
+def test_delete_user(client, user, token):
     response = client.delete(
         f'/conta/{user.id}',
+        headers={'Authorization': f'Bearer {token}'},
     )
 
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {'message': 'Conta deletada com sucesso'}
 
 
-def test_delete_wrong_user(client,):
+def test_delete_user_error(client, token, other_user):
     response = client.delete(
-        '/conta/999',
+        f'/conta/{other_user.id}',
+        headers={'Authorization': f'Bearer {token}'},
     )
 
-    assert response.status_code == HTTPStatus.NOT_FOUND
-    assert response.json() == {'detail': 'User not found'}
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
+    assert response.json() == {'detail': 'Não autorizado'}
