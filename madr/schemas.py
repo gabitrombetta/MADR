@@ -40,3 +40,26 @@ class AuthorUpdate(BaseModel):
 
 class AuthorList(BaseModel):
     autores: list[AuthorPublic]
+
+
+# Books
+class BookSchema(BaseModel):
+    year: str
+    title: str
+    author_id: int
+
+
+class BookPublic(BaseModel):
+    id: int
+    year: str
+    title: str
+    author_id: int
+
+
+class BookUpdate(BaseModel):
+    year: str | None
+    title: str | None
+
+
+class BookList(BaseModel):
+    livros: list[BookPublic]
