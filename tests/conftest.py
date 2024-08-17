@@ -7,7 +7,8 @@ from sqlalchemy.pool import StaticPool
 
 from madr.app import app
 from madr.database import get_session
-from madr.models import User, table_registry
+from madr.models import Author, User, table_registry
+from madr.sanitize import sanitize
 from madr.security import get_password_hash
 
 
@@ -18,6 +19,13 @@ class UserFactory(factory.Factory):
     username = factory.Sequence(lambda n: f'test{n}')
     email = factory.LazyAttribute(lambda obj: f'{obj.username}@test.com')
     password = factory.LazyAttribute(lambda obj: f'{obj.username}@example.com')
+
+
+# class AuthorFactory(factory.Factory):
+#     class Meta:
+#         model = Author
+
+#     name = 'test name'
 
 
 @pytest.fixture
@@ -79,6 +87,17 @@ def other_user(session):
     user.clean_password = pwd
 
     return user
+
+
+@pytest.fixture
+def author(session):
+    author = Author(name=sanitize('Test Author'))
+
+    session.add(author)
+    session.commit()
+    session.refresh(author)
+
+    return author
 
 
 @pytest.fixture

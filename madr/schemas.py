@@ -22,3 +22,21 @@ class UserPublic(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+
+# Author
+class AuthorSchema(BaseModel):
+    name: str
+
+
+class AuthorPublic(BaseModel):
+    id: int
+    name: str
+
+
+class AuthorUpdate(BaseModel):
+    name: str | None
+
+
+class AuthorList(BaseModel):
+    autores: list[AuthorPublic]
