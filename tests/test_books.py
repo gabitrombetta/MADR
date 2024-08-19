@@ -131,9 +131,7 @@ def test_get_book_by_params_should_return_2(client, session, author):
     assert len(response.json()['livros']) == expected_books
 
 
-def test_get_book_by_params_should_return_nothing(
-    client
-):
+def test_get_book_by_params_should_return_nothing(client):
     response = client.get(
         '/book/?title=test&year=199',
     )
