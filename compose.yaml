@@ -12,7 +12,6 @@ services:
 
   madr_app:
     image: madr_app
-    platform: linux/amd64
     build: .
     entrypoint: ./entrypoint.sh
     ports:
